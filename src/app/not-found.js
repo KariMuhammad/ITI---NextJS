@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function Custom404() {
+export default function NotFound() {
   return (
     <div style={{ textAlign: "center", paddingTop: "50px" }}>
       <h1>404 - Page Not Found</h1>
@@ -9,5 +9,3 @@ export default function Custom404() {
     </div>
   );
 }
-
-Custom404.showNavbar = false;

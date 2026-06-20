@@ -1,7 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { useState, useTransition, useDeferredValue } from "react";
 
-export default function ProductsPage({ products, brands }) {
+export default function ProductsList({ products, brands }) {
   const [search, setSearch] = useState("");
   const [brand, setBrand] = useState("");
   const [sortBy, setSortBy] = useState("");
@@ -37,7 +39,7 @@ export default function ProductsPage({ products, brands }) {
   return (
     <div>
       <h1>Products</h1>
-      <p>Data loaded with getStaticProps from dummyjson.com</p>
+      <p>Data loaded from MongoDB via Mongoose (seeded from dummyjson.com)</p>
 
       <div style={{ marginBottom: "20px" }}>
         <input
@@ -79,9 +81,18 @@ export default function ProductsPage({ products, brands }) {
         Showing {list.length} of {products.length} products
       </p>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "15px" }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gap: "15px",
+        }}
+      >
         {list.map((product) => (
-          <div key={product.id} style={{ border: "1px solid #ccc", padding: "10px" }}>
+          <div
+            key={product.id}
+            style={{ border: "1px solid #ccc", padding: "10px" }}
+          >
             <img
               src={product.thumbnail}
               alt={product.title}
@@ -91,23 +102,13 @@ export default function ProductsPage({ products, brands }) {
             />
             <h3>{product.title}</h3>
             <p>{product.brand}</p>
-            <p>${product.price} — Rating: {product.rating}</p>
+            <p>
+              ${product.price} — Rating: {product.rating}
+            </p>
             <Link href={`/products/${product.id}`}>View details</Link>
           </div>
         ))}
       </div>
     </div>
   );
-}
-
-export async function getStaticProps() {
-  const res = await fetch("https://dummyjson.com/products?limit=0");
-  const data = await res.json();
-  const products = data.products;
-
-  const brands = [...new Set(products.map((p) => p.brand).filter(Boolean))];
-
-  return {
-    props: { products, brands },
-  };
 }
