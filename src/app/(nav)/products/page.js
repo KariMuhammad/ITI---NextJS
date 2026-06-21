@@ -1,15 +1,10 @@
 import ProductsList from "@/components/ProductsList";
+import { getAllProducts } from "@/lib/products";
 
-async function getProducts() {
-  const res = await fetch("https://dummyjson.com/products?limit=0", {
-    next: { revalidate: 3600 },
-  });
-  const data = await res.json();
-  return data.products;
-}
+export const dynamic = "force-dynamic";
 
 export default async function ProductsPage() {
-  const products = await getProducts();
+  const products = await getAllProducts();
   const brands = [...new Set(products.map((p) => p.brand).filter(Boolean))];
 
   return <ProductsList products={products} brands={brands} />;

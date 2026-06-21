@@ -39,7 +39,7 @@ export default function ProductsList({ products, brands }) {
   return (
     <div>
       <h1>Products</h1>
-      <p>Data loaded with static fetch from dummyjson.com</p>
+      <p>Data loaded from MongoDB via Mongoose</p>
 
       <div style={{ marginBottom: "20px" }}>
         <input

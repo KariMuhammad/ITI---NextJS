@@ -1,31 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getProductById } from "@/lib/products";
 
-async function getProducts() {
-  const res = await fetch("https://dummyjson.com/products?limit=0", {
-    next: { revalidate: 3600 },
-  });
-
-  if (!res.ok) {
-    throw new Error("Failed to load products");
-  }
-
-  const data = await res.json();
-  return data.products;
-}
-
-export async function generateStaticParams() {
-  const products = await getProducts();
-
-  return products.map((product) => ({
-    id: String(product.id),
-  }));
-}
+export const dynamic = "force-dynamic";
 
 export default async function ProductPage({ params }) {
   const { id } = await params;
-  const products = await getProducts();
-  const product = products.find((item) => String(item.id) === id);
+  const product = await getProductById(id);
 
   if (!product) {
     notFound();

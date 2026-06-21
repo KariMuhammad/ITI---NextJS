@@ -11,7 +11,7 @@ export default function Home() {
           <Link href="/about">Static route</Link> — /about
         </li>
         <li>
-          <Link href="/products">SSG list</Link> — /products (static fetch)
+          <Link href="/products">Products list</Link> — /products (MongoDB)
         </li>
         <li>
           <Link href="/products/1">Dynamic route</Link> — /products/[id]

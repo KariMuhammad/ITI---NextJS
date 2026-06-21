@@ -1,32 +1,10 @@
 import connectDB from "@/lib/mongodb";
 import Product from "@/models/Product";
-
-export async function seedProductsIfEmpty() {
-  const count = await Product.countDocuments();
-
-  if (count > 0) {
-    return;
-  }
-
-  const response = await fetch("https://dummyjson.com/products?limit=0");
-  const data = await response.json();
-
-  const products = data.products.map((item) => ({
-    productId: item.id,
-    title: item.title,
-    description: item.description,
-    brand: item.brand,
-    price: item.price,
-    rating: item.rating,
-    thumbnail: item.thumbnail,
-  }));
-
-  await Product.insertMany(products);
-}
+import { seedProducts } from "@/seeders/products";
 
 export async function ensureProducts() {
   await connectDB();
-  await seedProductsIfEmpty();
+  await seedProducts();
 }
 
 export function formatProduct(product) {
@@ -39,4 +17,29 @@ export function formatProduct(product) {
     rating: product.rating,
     thumbnail: product.thumbnail,
   };
+}
+
+export async function getAllProducts() {
+  await ensureProducts();
+
+  const products = await Product.find().sort({ productId: 1 });
+  return products.map(formatProduct);
+}
+
+export async function getProductById(id) {
+  const productId = Number(id);
+
+  if (Number.isNaN(productId)) {
+    return null;
+  }
+
+  await ensureProducts();
+
+  const product = await Product.findOne({ productId });
+
+  if (!product) {
+    return null;
+  }
+
+  return formatProduct(product);
 }

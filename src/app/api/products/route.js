@@ -1,12 +1,9 @@
-import Product from "@/models/Product";
-import { ensureProducts, formatProduct } from "@/lib/products";
+import { getAllProducts } from "@/lib/products";
 
 export async function GET() {
   try {
-    await ensureProducts();
-
-    const products = await Product.find().sort({ productId: 1 });
-    return Response.json(products.map(formatProduct));
+    const products = await getAllProducts();
+    return Response.json(products);
   } catch (error) {
     return Response.json(
       { message: "Failed to fetch products", error: error.message },
